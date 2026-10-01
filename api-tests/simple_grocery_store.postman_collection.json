@@ -1,0 +1,430 @@
+{
+  "info": {
+    "_postman_id": "c4b20ad1-5896-46af-9632-30347a1b7f48",
+    "name": "simple_grocery_store",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23192526"
+  },
+  "item": [
+    {
+      "name": "Positive Test Cases",
+      "item": [
+        {
+          "name": "User_Authentication",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Client account registered successfully, status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Access token is saved for subsequent requests\", function () {\r\n    pm.expect(responseData.accessToken).to.exist;\r\n\r\n    pm.environment.set(\"accessToken\", responseData.accessToken);\r\n\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set(\"clientmail\", \"rahat_\" + Date.now() + \"@gmail.com\");"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n   \"clientName\": \"Client ABC\",\r\n   \"clientEmail\": \"{{clientmail}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/api-clients",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "api-clients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Products_List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Product lists are fetched successfully, Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response schema and data types are correct\", function () {\r\n    pm.expect(responseData).to.be.an(\"array\").that.is.not.empty;\r\n\r\n    const product = responseData[0];\r\n    \r\n    pm.expect(product).to.have.property(\"id\").that.is.a(\"number\");\r\n    pm.expect(product).to.have.property(\"category\").that.is.a(\"string\");\r\n    pm.expect(product).to.have.property(\"name\").that.is.a(\"string\");\r\n    pm.expect(product).to.have.property(\"inStock\").that.is.a(\"boolean\");\r\n\r\n    pm.environment.set(\"product_id\", product.id);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/products",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create_Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Cart is created successfully, Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\npm.test(\"Cart id is saved to add items\", function () {\r\n    pm.expect(responseData.cartId).to.exist;\r\n    \r\n    pm.environment.set(\"cart_id\", responseData.cartId);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseurl}}/carts",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "carts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_items_to_the_cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\npm.test(\"Item is added to cart successfully, Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n    });\r\npm.test(\"Item id is saved in the environment variable \", function () {\r\n    pm.environment.set(\"item_id\", responseData.itemId);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"productId\": {{product_id}}\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/carts/{{cart_id}}/items",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create_Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\n\npm.test(\"Order is placed successfully, Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Order id and customer name are saved for tracking\", function () {\n    pm.expect(responseData.orderId).to.exist;\n\n    pm.environment.set(\"order_id\", responseData.orderId);\n\n    const requestPayload = JSON.parse(pm.request.body.raw);\n\n    pm.environment.set(\"customer_name\", requestPayload.customerName);\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cartId\": \"{{cart_id}}\", \r\n    \"customerName\": \"Client ABC\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/orders",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "View_single_order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Created order is fetched successfully, Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Order details are matched as submitted data\", function () {\r\n\r\n    pm.expect(responseData.id).to.eql(pm.environment.get(\"order_id\"));\r\n    pm.expect(responseData.customerName).to.eql (pm.environment.get(\"customer_name\"));\r\n\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/orders/{{order_id}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "orders",
+                "{{order_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Negative Test Cases",
+      "item": [
+        {
+          "name": "Missing_Access_token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Access request is unauthorized, Status code is 401\", function () {\r\n    pm.response.to.have.status(401);\r\n});\r\n\r\npm.test(\"Authorization error message is returned in the response body\", function () {\r\n    pm.expect(responseData.error).to.exist;\r\n    pm.expect(responseData.error.toLowerCase()).to.include(\"missing\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/orders",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Non_exist_productid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json ();\r\n\r\npm.test(\"Status code is 404 Not Found\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Product not found error message is returned\", function () {\r\n\r\n    pm.expect(responseData.error).to.exist;\r\n\r\n    pm.expect(responseData.error.toLowerCase()).to.include(\"no product\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/products/1234",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "products",
+                "1234"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid_Payload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Bad request is submitted, Status code is 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Error message is returned successfully\", function () {\r\n     pm.expect(responseData.error).to.exist;\r\n    pm.expect(responseData.error.toLowerCase()).to.include(\"missing\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n    \"customerName\": \"Client ABC\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/orders",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add_item_without_Payload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const responseData = pm.response.json();\r\n\r\npm.test(\"Bad request is submitted, Status code is 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Invalid or Missing product id message is returned successfully\", function () {\r\n     pm.expect(responseData.error).to.exist;\r\n    pm.expect(responseData.error.toLowerCase()).to.include(\"missing\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/carts/{{cart_id}}/items",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "carts",
+                "{{cart_id}}",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
