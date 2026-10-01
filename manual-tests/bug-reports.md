@@ -34,6 +34,8 @@ After log in as **problem\_user**, the system displays the same product image fo
 
 **Actual results:** The same product image is displayed for all products on the inventory page.
 
+**Evidence:**
+![SD-01 Screenshot](./Bug_reports_Evidences/SD_01.png)
 
 
 **Severity:** Medium
@@ -80,8 +82,12 @@ When a invalid credential is submitted on the login page, the Error message text
 2. The cross (x) icon is misaligned in the field
 
 
+**Evidence:**
+![SD-02 Screenshot](./Bug_reports_Evidences/SD_02.png)
+
 
 **Severity:** Low
+
 **Priority:** High
 
 \---
@@ -133,9 +139,14 @@ For any authorized user, sorting options should be applied to the product accord
 
 A**ctual results:** Filter is not applied to the non-default sorting options - name (z to a), price (low to high) and Price (high to low)
 
+**Evidence:**
+![SD-03 Screenshot 1](./Bug_reports_Evidences/SD_03%20(1).png)
+![SD-03 Screenshot 2](./Bug_reports_Evidences/SD_03%20(2).png)
+![SD-03 Screenshot 3](./Bug_reports_Evidences/SD_03%20(3).png)
 
 
 **Severity:** High
+
 **Priority:** High
 
 
@@ -179,9 +190,11 @@ After log in as problem\_user, 'Add to cart' is not working for few of the items
 
 **Actual results:** For few items, the product is not added to the cart.
 
-
+**Evidence:**
+![SD-04 Screenshot](./Bug_reports_Evidences/SD_04.png)
 
 **Severity:** High
+
 **Priority:** High
 
 
@@ -222,9 +235,13 @@ After login as any user, clicking on any product's name or image, user should be
 
 **Actual results:** User always redirects to different product's page
 
+**Evidence:**
+![SD-05 Screenshot 1](./Bug_reports_Evidences/SD_05.png)
+![SD-05 Screenshot 2](./Bug_reports_Evidences/SD_05_2.png)
 
 
 **Severity:** High
+
 **Priority:** High
 
 
@@ -272,9 +289,11 @@ After log in as problem\_user, 'Remove' function is not working after adding a i
 
 **Actual results:** Product is not removed from the cart
 
-
+**Evidence:**
+![SD-06 Screenshot](./Bug_reports_Evidences/SD_06.png)
 
 **Severity:** High
+
 **Priority:** High
 
 \---
@@ -314,9 +333,12 @@ When log in into the application with the same user credentials but on different
 
 **Actual results:** Items added on the cart are saved based on browser session.
 
-
+**Evidence:**
+![SD-07 Screenshot 1](./Bug_reports_Evidences/SD_07.png)
+![SD-07 Screenshot 2](./Bug_reports_Evidences/SD_07_2.png)
 
 **Severity:** High
+
 **Priority:** Medium
 
 
@@ -359,9 +381,11 @@ After login as problem\_user, Product Details Page for Item ID 6 displays incorr
 
 2\. Price field contains root operator.
 
-
+**Evidence:**
+![SD-08 Screenshot](./Bug_reports_Evidences/SD_08.png)
 
 **Severity:** High
+
 **Priority:** High
 
 
@@ -398,9 +422,12 @@ When the cart is empty but user tries to 'Checkout', then user is allowed to pro
 
 **Actual results:** Error message is not displayed to the user indicating the cart is empty
 
-
+**Evidence:**
+![SD-09 Screenshot 1](./Bug_reports_Evidences/SD_09.png)
+![SD-09 Screenshot 2](./Bug_reports_Evidences/SD_09_2.png)
 
 **Severity:** Low
+
 **Priority:** Low
 
 \---
@@ -439,8 +466,11 @@ After login as problem\_user, while Doing the checkout process, the 'Last Name' 
 
 **Actual results:** User is unable to enter any data on Last name field and fails to continue to the next page
 
-
+**Evidence:**
+![SD-10 Screenshot 1](./Bug_reports_Evidences/SD_10.png)
+![SD-10 Screenshot 2](./Bug_reports_Evidences/SD_10_2.png)
 
 **Severity:** High
+
 **Priority:** High
 
